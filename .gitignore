@@ -1,3 +1,5 @@
+core/data/*
+
 # Logs
 logs
 *.log
