@@ -1,10 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import todoController from "@controller/todoController";
+
+type HttpResponsesType = {
+    [key: string]: () => void;
+};
 
 export default function handler(
     request: NextApiRequest,
     response: NextApiResponse
 ) {
-    response.status(200).json({
-        todoList: [],
-    });
+    const HttpResponses: HttpResponsesType = {
+        GET: () => todoController.get(request, response),
+    };
+    if (request.method) {
+        return HttpResponses[request.method]();
+    }
 }
