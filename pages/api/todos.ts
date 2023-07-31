@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import todoController from "@controller/todoController";
+import todoController from "@server/controller/todoController";
 
 type HttpResponsesType = {
     [key: string]: () => void;

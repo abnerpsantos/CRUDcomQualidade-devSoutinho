@@ -1,17 +1,24 @@
+import todoController from "@ui/controller/todoController";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
-import { Todo } from "core/types/todo-types";
 import { useEffect, useState } from "react";
+
+interface Todo {
+    id: string;
+    content: string;
+    date: string;
+    done: boolean;
+}
 
 const bg = "https://mariosouto.com/cursos/crudcomqualidade/bg";
 
 export default function Page() {
-    const [todos, setTodos] = useState<Array<Todo>>([]);
+    const [todoList, setTodoList] = useState<Array<Todo>>([]);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         (async function () {
-            const data = await fetch("/api/todos");
-            const { todoList } = await data.json();
-            setTodos(() => todoList);
+            const data = await todoController.get();
+            setTodoList(data);
         })();
     }, []);
 
@@ -55,22 +62,30 @@ export default function Page() {
                     </thead>
 
                     <tbody>
-                        {todos.map((todo) => {
-                            return (
-                                <tr key={todo.id}>
-                                    <td>
-                                        <input type="checkbox" />
-                                    </td>
-                                    <td>{todo.id.substring(0, 4)}</td>
-                                    <td>{todo.content}</td>
-                                    <td align="right">
-                                        <button data-type="delete">
-                                            Apagar
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        {todoList.length ? (
+                            todoList.map((todo) => {
+                                return (
+                                    <tr key={todo.id}>
+                                        <td>
+                                            <input type="checkbox" />
+                                        </td>
+                                        <td>{todo.id.substring(0, 4)}</td>
+                                        <td>{todo.content}</td>
+                                        <td align="right">
+                                            <button data-type="delete">
+                                                Apagar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan={4} align="center">
+                                    Nenhum item encontrado
+                                </td>
+                            </tr>
+                        )}
                         <tr>
                             <td
                                 colSpan={4}
@@ -82,19 +97,20 @@ export default function Page() {
                         </tr>
 
                         <tr>
-                            <td colSpan={4} align="center">
-                                Nenhum item encontrado
-                            </td>
-                        </tr>
-
-                        <tr>
                             <td
                                 colSpan={4}
                                 align="center"
                                 style={{ textAlign: "center" }}
                             >
-                                <button data-type="load-more">
-                                    Carregar mais{" "}
+                                <button
+                                    data-type="load-more"
+                                    onClick={() =>
+                                        setPage(
+                                            (currentValue) => currentValue + 1
+                                        )
+                                    }
+                                >
+                                    Página {page}, Carregar mais{" "}
                                     <span
                                         style={{
                                             display: "inline-block",
