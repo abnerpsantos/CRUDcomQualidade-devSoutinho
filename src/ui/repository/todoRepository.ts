@@ -5,7 +5,6 @@ interface TodoRepositoryGetParams {
 interface TodoRepositoryGetOutput {
     todoList: Array<Todo>;
     totalOfTodos: number;
-    pages: number;
 }
 interface Todo {
     id: string;
@@ -26,7 +25,6 @@ async function get({
     return {
         todoList,
         totalOfTodos,
-        pages: totalOfTodos / limit,
     };
 }
 

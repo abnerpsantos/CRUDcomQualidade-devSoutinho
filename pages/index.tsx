@@ -16,16 +16,15 @@ export default function Page() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const totalTodos = useRef(0);
-    const totalPages = useRef(1);
 
     useEffect(() => {
         (async function () {
+            setTodoList([]);
             setLoading(true);
-            const { todoList, pages, totalOfTodos } = await todoController.get({
+            const { todoList, totalOfTodos } = await todoController.get({
                 page: page,
             });
             totalTodos.current = totalOfTodos;
-            totalPages.current = pages;
             setTodoList(todoList);
             setLoading(false);
         })();
@@ -115,7 +114,7 @@ export default function Page() {
                             >
                                 <button
                                     data-type="load-more"
-                                    disabled={page > totalPages.current}
+                                    disabled={totalTodos.current < 5}
                                     onClick={() =>
                                         setPage(
                                             (currentValue) => currentValue + 1
