@@ -18,16 +18,13 @@ async function get({
     page,
     limit,
 }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
-    const data = await fetch("/api/todos");
+    const data = await fetch(`/api/todos?page=${page}&limit=${limit}`);
     const jsonData = await data.json();
     const { todoList } = parseTodo(jsonData);
     const totalOfTodos = todoList.length;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const paginatedTodos = todoList.slice(startIndex, endIndex);
 
     return {
-        todoList: paginatedTodos,
+        todoList,
         totalOfTodos,
         pages: totalOfTodos / limit,
     };
