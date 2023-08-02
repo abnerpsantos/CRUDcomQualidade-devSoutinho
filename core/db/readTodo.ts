@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 
 interface ReadTodoGetParams {
     page: number;
-    limit: number;
+    limit?: number;
 }
 
 export default function readTodo({ page, limit }: ReadTodoGetParams): {
@@ -13,6 +13,11 @@ export default function readTodo({ page, limit }: ReadTodoGetParams): {
     const file = readFileSync(DB_FILE_PATH, "utf-8");
     const fileDataAsJSON = JSON.parse(file);
     const parsedData = parseData(fileDataAsJSON);
+    if (!limit) {
+        return {
+            todoList: parsedData.todoList,
+        };
+    }
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const paginatedTodos = parsedData.todoList.slice(startIndex, endIndex);

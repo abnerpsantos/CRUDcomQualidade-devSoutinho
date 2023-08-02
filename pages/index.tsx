@@ -23,6 +23,7 @@ export default function Page() {
             setLoading(true);
             const { todoList, totalOfTodos } = await todoController.get({
                 page: page,
+                limit: 5,
             });
             totalTodos.current = totalOfTodos;
             setTodoList(todoList);

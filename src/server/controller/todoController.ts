@@ -1,6 +1,11 @@
 import { readTodo } from "core/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
+interface QueryObj {
+    page: number;
+    limit?: number;
+}
+
 function get(req: NextApiRequest, res: NextApiResponse) {
     const { page, limit } = parseQuery(req.query);
     const todoList = readTodo({ page, limit });
@@ -11,9 +16,8 @@ function parseQuery(query: unknown) {
     if (query === null || query === undefined || typeof query !== "object") {
         throw new Error("Invalid query!");
     }
-    const queryObj = {
+    const queryObj: QueryObj = {
         page: 1,
-        limit: 5,
     };
     if (
         "limit" in query &&

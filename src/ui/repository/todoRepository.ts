@@ -1,6 +1,6 @@
 interface TodoRepositoryGetParams {
     page: number;
-    limit: number;
+    limit?: number;
 }
 interface TodoRepositoryGetOutput {
     todoList: Array<Todo>;
