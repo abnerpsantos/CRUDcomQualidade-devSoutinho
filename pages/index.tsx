@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 interface Todo {
     id: string;
     content: string;
-    date: Date;
+    date: string;
     done: boolean;
 }
 

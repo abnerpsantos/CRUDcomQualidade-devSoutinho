@@ -1,51 +1,50 @@
+import { z } from "zod";
+
 interface TodoRepositoryGetParams {
     page: number;
     limit?: number;
 }
+
 interface TodoRepositoryGetOutput {
     todoList: Array<Todo>;
     totalOfTodos: number;
 }
-interface Todo {
-    id: string;
-    content: string;
-    date: Date;
-    done: boolean;
-}
+
+type Todo = z.infer<typeof todoSchema>;
+
+const todoSchema = z.object({
+    id: z.string().uuid(),
+    content: z.string(),
+    date: z.string().datetime(),
+    done: z.boolean(),
+});
+
+const fileSchema = z.object({
+    todoList: z.array(todoSchema),
+});
 
 async function get({
     page,
     limit,
 }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
-    const data = await fetch(`/api/todos?page=${page}&limit=${limit}`);
+    let fetchUrl = `/api/todos?page=${page}`;
+    if (limit !== undefined) {
+        fetchUrl = `/api/todos?page=${page}&limit=${limit}`;
+    }
+
+    const data = await fetch(fetchUrl);
     const jsonData = await data.json();
-    const { todoList } = parseTodo(jsonData);
+    const body = fileSchema.safeParse(jsonData);
+    if (!body.success) {
+        throw new Error(body.error.message);
+    }
+    const { todoList } = body.data;
     const totalOfTodos = todoList.length;
 
     return {
         todoList,
         totalOfTodos,
     };
-}
-
-function parseTodo(responseBody: unknown): { todoList: Array<Todo> } {
-    if (
-        responseBody !== null &&
-        typeof responseBody === "object" &&
-        "todoList" in responseBody &&
-        Array.isArray(responseBody.todoList)
-    ) {
-        return {
-            todoList: responseBody.todoList.map((todo) => {
-                if (todo === null && typeof todo !== "object") {
-                    throw new Error("Invalid todo from api");
-                }
-                const { id, content, date, done } = todo;
-                return { id, content, date, done } as Todo;
-            }),
-        };
-    }
-    throw new Error("Invalid todo from api");
 }
 
 export default {

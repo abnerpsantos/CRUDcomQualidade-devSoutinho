@@ -3,7 +3,7 @@ import todoRepository from "@ui/repository/todoRepository";
 interface Todo {
     id: string;
     content: string;
-    date: Date;
+    date: string;
     done: boolean;
 }
 interface TodoControllerGetParams {
