@@ -9,7 +9,7 @@ interface createTodoParams {
     content: string;
 }
 
-function get({ page, limit }: getTodoListParams) {
+async function get({ page, limit }: getTodoListParams) {
     const { todoList } = readTodo();
     if (!limit) {
         return {
@@ -24,7 +24,7 @@ function get({ page, limit }: getTodoListParams) {
     };
 }
 
-function create({ content }: createTodoParams) {
+async function create({ content }: createTodoParams) {
     const todo = createTodo(content);
     return todo;
 }

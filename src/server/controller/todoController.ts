@@ -6,15 +6,15 @@ interface QueryObj {
     limit?: number;
 }
 
-function getTodos(req: NextApiRequest, res: NextApiResponse) {
+async function getTodos(req: NextApiRequest, res: NextApiResponse) {
     const { page, limit } = parseQuery(req.query);
-    const todoList = todoRepository.get({ page, limit });
+    const todoList = await todoRepository.get({ page, limit });
     return res.status(200).json(todoList);
 }
 
-function createTodo(req: NextApiRequest, res: NextApiResponse) {
+async function createTodo(req: NextApiRequest, res: NextApiResponse) {
     const { content } = parseBody(req.body);
-    const todo = todoRepository.create({ content });
+    const todo = await todoRepository.create({ content });
     return res.status(201).json(todo);
 }
 
