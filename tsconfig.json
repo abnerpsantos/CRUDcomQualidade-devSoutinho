@@ -17,7 +17,9 @@
         "baseUrl": ".",
         "paths": {
             "@ui/*": ["src/ui/*"],
+            "@server/repository/*": ["src/server/repository/*"],
             "@server/controller/*": ["src/server/controller/*"],
+            "@ui/repository/*": ["src/ui/repository/*"],
             "@ui/controller/*": ["src/ui/controller/*"]
         }
     },

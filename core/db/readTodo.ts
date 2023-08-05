@@ -2,28 +2,13 @@ import { Todo } from "core/types/todo-types";
 import { DB_FILE_PATH } from "core/utils/constants";
 import { readFileSync } from "fs";
 
-interface ReadTodoGetParams {
-    page: number;
-    limit?: number;
-}
-
-export default function readTodo({ page, limit }: ReadTodoGetParams): {
+export default function readTodo(): {
     todoList: Array<Todo>;
 } {
     const file = readFileSync(DB_FILE_PATH, "utf-8");
-    const fileDataAsJSON = JSON.parse(file);
-    const parsedData = parseData(fileDataAsJSON);
-    if (!limit) {
-        return {
-            todoList: parsedData.todoList,
-        };
-    }
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const paginatedTodos = parsedData.todoList.slice(startIndex, endIndex);
-    return {
-        todoList: paginatedTodos,
-    };
+    const data = JSON.parse(file);
+    const parsedData = parseData(data);
+    return parsedData;
 }
 
 function parseData(data: unknown): {

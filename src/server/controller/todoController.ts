@@ -1,4 +1,4 @@
-import { readTodo } from "core/db";
+import todoRepository from "@server/repository/todoRepository";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface QueryObj {
@@ -8,7 +8,7 @@ interface QueryObj {
 
 function get(req: NextApiRequest, res: NextApiResponse) {
     const { page, limit } = parseQuery(req.query);
-    const todoList = readTodo({ page, limit });
+    const todoList = todoRepository.getTodoList({ page, limit });
     return res.status(200).json(todoList);
 }
 
