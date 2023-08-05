@@ -38,6 +38,7 @@ export default function Page() {
             <header
                 style={{
                     background: `url(${bg})`,
+                    backgroundSize: "cover",
                 }}
             >
                 <div className="typewriter">
@@ -45,7 +46,13 @@ export default function Page() {
                 </div>
                 <form>
                     <input type="text" placeholder="Correr, Estudar..." />
-                    <button type="submit" aria-label="Adicionar novo item">
+                    <button
+                        style={{
+                            padding: "4px",
+                        }}
+                        type="submit"
+                        aria-label="Adicionar novo item"
+                    >
                         +
                     </button>
                 </form>
