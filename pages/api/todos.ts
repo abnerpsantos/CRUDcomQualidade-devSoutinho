@@ -10,7 +10,8 @@ export default function handler(
     response: NextApiResponse
 ) {
     const HttpResponses: HttpResponsesType = {
-        GET: () => todoController.get(request, response),
+        GET: () => todoController.getTodos(request, response),
+        POST: () => todoController.createTodo(request, response),
     };
     if (request.method) {
         return HttpResponses[request.method]();

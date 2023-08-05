@@ -1,17 +1,34 @@
-import todoRepository from "@server/repository/todoRepository";
 import { NextApiRequest, NextApiResponse } from "next";
+import todoRepository from "@server/repository/todoRepository";
 
 interface QueryObj {
     page: number;
     limit?: number;
 }
 
-function get(req: NextApiRequest, res: NextApiResponse) {
+function getTodos(req: NextApiRequest, res: NextApiResponse) {
     const { page, limit } = parseQuery(req.query);
-    const todoList = todoRepository.getTodoList({ page, limit });
+    const todoList = todoRepository.get({ page, limit });
     return res.status(200).json(todoList);
 }
 
+function createTodo(req: NextApiRequest, res: NextApiResponse) {
+    const { content } = parseBody(req.body);
+    const todo = todoRepository.create({ content });
+    return res.status(201).json(todo);
+}
+
+function parseBody(body: unknown) {
+    if (body === null || body === undefined || typeof body !== "object") {
+        throw new Error("Invalid body!");
+    }
+    if ("content" in body && typeof body.content === "string") {
+        return {
+            content: body.content,
+        };
+    }
+    throw new Error("Invalid body!");
+}
 function parseQuery(query: unknown) {
     if (query === null || query === undefined || typeof query !== "object") {
         throw new Error("Invalid query!");
@@ -37,5 +54,6 @@ function parseQuery(query: unknown) {
 }
 
 export default {
-    get,
+    getTodos,
+    createTodo,
 };

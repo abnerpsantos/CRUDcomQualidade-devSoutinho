@@ -1,11 +1,15 @@
-import { readTodo } from "core/db";
+import { createTodo, readTodo } from "core/db";
 
 interface getTodoListParams {
     page: number;
     limit?: number;
 }
 
-function getTodoList({ page, limit }: getTodoListParams) {
+interface createTodoParams {
+    content: string;
+}
+
+function get({ page, limit }: getTodoListParams) {
     const { todoList } = readTodo();
     if (!limit) {
         return {
@@ -20,6 +24,12 @@ function getTodoList({ page, limit }: getTodoListParams) {
     };
 }
 
+function create({ content }: createTodoParams) {
+    const todo = createTodo(content);
+    return todo;
+}
+
 export default {
-    getTodoList,
+    get,
+    create,
 };
