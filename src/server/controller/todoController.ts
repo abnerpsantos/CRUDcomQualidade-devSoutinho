@@ -26,7 +26,7 @@ async function getTodos(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function createTodo(req: NextApiRequest, res: NextApiResponse) {
-    const body = bodySchema.safeParse(req.body);
+    const body = bodySchema.safeParse(JSON.parse(req.body));
     if (!body.success) {
         return res.status(400).json({
             error: {

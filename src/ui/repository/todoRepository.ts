@@ -5,6 +5,9 @@ interface TodoRepositoryGetParams {
     limit?: number;
 }
 
+interface TodoRepositoryCreateParams {
+    content: string;
+}
 interface TodoRepositoryGetOutput {
     todoList: Array<Todo>;
     totalOfTodos: number;
@@ -31,7 +34,6 @@ async function get({
     if (limit !== undefined) {
         fetchUrl = `/api/todos?page=${page}&limit=${limit}`;
     }
-
     const data = await fetch(fetchUrl);
     const jsonData = await data.json();
     const body = fileSchema.safeParse(jsonData);
@@ -47,6 +49,14 @@ async function get({
     };
 }
 
+async function create({ content }: TodoRepositoryCreateParams) {
+    fetch("/api/todos", {
+        method: "POST",
+        body: JSON.stringify({ content }),
+    });
+}
+
 export default {
     get,
+    create,
 };

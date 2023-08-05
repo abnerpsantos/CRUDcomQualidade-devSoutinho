@@ -16,6 +16,7 @@ export default function Page() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
+    const [newTodoInput, setNewTodoInput] = useState("");
     const totalTodos = useRef(0);
     const filteredTodos = todoController.filterTodo(search, todoList);
 
@@ -44,8 +45,20 @@ export default function Page() {
                 <div className="typewriter">
                     <h1>O que fazer hoje?</h1>
                 </div>
-                <form>
-                    <input type="text" placeholder="Correr, Estudar..." />
+                <form
+                    onSubmit={async (e) => {
+                        e.preventDefault();
+                        await todoController.create({ content: newTodoInput });
+                        setNewTodoInput("");
+                        setPage(1);
+                    }}
+                >
+                    <input
+                        type="text"
+                        placeholder="Correr, Estudar..."
+                        value={newTodoInput}
+                        onChange={(e) => setNewTodoInput(e.target.value)}
+                    />
                     <button
                         style={{
                             padding: "4px",

@@ -11,6 +11,10 @@ interface TodoControllerGetParams {
     limit?: number;
 }
 
+interface TodoControllerCreateParams {
+    content: string;
+}
+
 async function get({ page, limit }: TodoControllerGetParams = {}) {
     return todoRepository.get({ page: page || 1, limit: limit });
 }
@@ -21,7 +25,12 @@ function filterTodo(searchParam: string, todoList: Todo[]) {
         return regex.test(todo.content);
     });
 }
+
+function create({ content }: TodoControllerCreateParams) {
+    return todoRepository.create({ content });
+}
 export default {
     get,
     filterTodo,
+    create,
 };
