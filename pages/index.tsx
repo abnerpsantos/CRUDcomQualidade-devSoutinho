@@ -15,11 +15,12 @@ export default function Page() {
     const [todoList, setTodoList] = useState<Array<Todo>>([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
     const totalTodos = useRef(0);
+    const filteredTodos = todoController.filterTodo(search, todoList);
 
     useEffect(() => {
         (async function () {
-            setTodoList([]);
             setLoading(true);
             const { todoList, totalOfTodos } = await todoController.get({
                 page: page,
@@ -55,6 +56,7 @@ export default function Page() {
                     <input
                         type="text"
                         placeholder="Filtrar lista atual, ex: Dentista"
+                        onChange={(e) => setSearch(e.target.value)}
                     />
                 </form>
 
@@ -71,8 +73,8 @@ export default function Page() {
                     </thead>
 
                     <tbody>
-                        {todoList.length ? (
-                            todoList.map((todo) => {
+                        {filteredTodos.length ? (
+                            filteredTodos.map((todo) => {
                                 return (
                                     <tr key={todo.id}>
                                         <td>
