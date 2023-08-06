@@ -24,6 +24,7 @@ const todoSchema = z.object({
 
 const fileSchema = z.object({
     todoList: z.array(todoSchema),
+    totalOfTodos: z.number(),
 });
 
 async function get({
@@ -40,8 +41,7 @@ async function get({
     if (!body.success) {
         throw new Error(body.error.message);
     }
-    const { todoList } = body.data;
-    const totalOfTodos = todoList.length;
+    const { todoList, totalOfTodos } = body.data;
 
     return {
         todoList,

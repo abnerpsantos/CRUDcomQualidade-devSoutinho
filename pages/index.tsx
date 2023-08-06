@@ -17,21 +17,29 @@ export default function Page() {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [newTodoInput, setNewTodoInput] = useState("");
+    const [countSubmitCall, setCountSubmitCall] = useState(0);
     const totalTodos = useRef(0);
+    const limitOfTodos = 5;
+    const shouldDisableButton = page * limitOfTodos >= totalTodos.current;
     const filteredTodos = todoController.filterTodo(search, todoList);
+    const calculatePage = () => {
+        const page = Math.ceil(totalTodos.current / limitOfTodos);
+        if (page === 0) return 1;
+        return page;
+    };
 
     useEffect(() => {
         (async function () {
             setLoading(true);
             const { todoList, totalOfTodos } = await todoController.get({
                 page: page,
-                limit: 5,
+                limit: limitOfTodos,
             });
             totalTodos.current = totalOfTodos;
             setTodoList(todoList);
             setLoading(false);
         })();
-    }, [page]);
+    }, [page, countSubmitCall]);
 
     return (
         <main>
@@ -50,7 +58,14 @@ export default function Page() {
                         e.preventDefault();
                         await todoController.create({ content: newTodoInput });
                         setNewTodoInput("");
-                        setPage(1);
+                        setCountSubmitCall((value) => value + 1);
+                        setPage(() => {
+                            const page = calculatePage();
+                            if (filteredTodos.length === 5) {
+                                return page + 1;
+                            }
+                            return page;
+                        });
                     }}
                 >
                     <input
@@ -137,7 +152,7 @@ export default function Page() {
                             >
                                 <button
                                     data-type="load-more"
-                                    disabled={totalTodos.current < 5}
+                                    disabled={shouldDisableButton}
                                     onClick={() =>
                                         setPage(
                                             (currentValue) => currentValue + 1

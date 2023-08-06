@@ -21,8 +21,11 @@ async function getTodos(req: NextApiRequest, res: NextApiResponse) {
         });
     }
     const { page, limit } = query.data;
-    const todoList = await todoRepository.get({ page, limit });
-    return res.status(200).json(todoList);
+    const { todoList, totalOfTodos } = await todoRepository.get({
+        page,
+        limit,
+    });
+    return res.status(200).json({ todoList, totalOfTodos });
 }
 
 async function createTodo(req: NextApiRequest, res: NextApiResponse) {

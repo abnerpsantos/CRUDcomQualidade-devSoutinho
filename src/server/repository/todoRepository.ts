@@ -11,8 +11,10 @@ interface createTodoParams {
 
 async function get({ page, limit }: getTodoListParams) {
     const { todoList } = readTodo();
+    const totalOfTodos = todoList.length;
     if (!limit) {
         return {
+            totalOfTodos,
             todoList,
         };
     }
@@ -20,6 +22,7 @@ async function get({ page, limit }: getTodoListParams) {
     const endIndex = page * limit;
     const paginatedTodos = todoList.slice(startIndex, endIndex);
     return {
+        totalOfTodos,
         todoList: paginatedTodos,
     };
 }
