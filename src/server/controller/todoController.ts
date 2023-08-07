@@ -46,7 +46,7 @@ async function createTodo(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function deleteTodo(req: NextApiRequest, res: NextApiResponse) {
-    const body = deleteTodoBodySchema.safeParse(req.body);
+    const body = deleteTodoBodySchema.safeParse(JSON.parse(req.body));
     if (!body.success) {
         throw new Error(body.error.message);
     }

@@ -27,6 +27,14 @@ export default function Page() {
         if (page === 0) return 1;
         return page;
     };
+    const deleteTodo = async function (id: string) {
+        await todoController.deleteTodo({ id });
+        if (filteredTodos.length === 1 && page !== 1) {
+            setPage((page) => page - 1);
+            return;
+        }
+        setCountSubmitCall((value) => value + 1);
+    };
 
     useEffect(() => {
         (async function () {
@@ -118,7 +126,12 @@ export default function Page() {
                                         <td>{todo.id.substring(0, 4)}</td>
                                         <td>{todo.content}</td>
                                         <td align="right">
-                                            <button data-type="delete">
+                                            <button
+                                                data-type="delete"
+                                                onClick={() =>
+                                                    deleteTodo(todo.id)
+                                                }
+                                            >
                                                 Apagar
                                             </button>
                                         </td>
