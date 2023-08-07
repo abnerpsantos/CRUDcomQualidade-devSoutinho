@@ -2,17 +2,20 @@ import { NextApiRequest, NextApiResponse } from "next";
 import todoRepository from "@server/repository/todoRepository";
 import { z } from "zod";
 
-const querySchema = z.object({
+const getTodoQuerySchema = z.object({
     page: z.coerce.number(),
     limit: z.coerce.number().optional(),
 });
 
-const bodySchema = z.object({
+const createTodoBodySchema = z.object({
     content: z.string(),
 });
 
+const deleteTodoBodySchema = z.object({
+    id: z.string().uuid(),
+});
 async function getTodos(req: NextApiRequest, res: NextApiResponse) {
-    const query = querySchema.safeParse(req.query);
+    const query = getTodoQuerySchema.safeParse(req.query);
     if (!query.success) {
         return res.status(400).json({
             error: {
@@ -29,7 +32,7 @@ async function getTodos(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function createTodo(req: NextApiRequest, res: NextApiResponse) {
-    const body = bodySchema.safeParse(JSON.parse(req.body));
+    const body = createTodoBodySchema.safeParse(JSON.parse(req.body));
     if (!body.success) {
         return res.status(400).json({
             error: {
@@ -42,7 +45,20 @@ async function createTodo(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json(todo);
 }
 
+async function deleteTodo(req: NextApiRequest, res: NextApiResponse) {
+    const body = deleteTodoBodySchema.safeParse(req.body);
+    if (!body.success) {
+        throw new Error(body.error.message);
+    }
+    const { id } = body.data;
+    const success = await todoRepository.deleteTodoById({ id });
+    return res.status(201).json({
+        message: success,
+    });
+}
+
 export default {
     getTodos,
     createTodo,
+    deleteTodo,
 };

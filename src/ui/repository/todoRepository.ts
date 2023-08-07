@@ -13,6 +13,10 @@ interface TodoRepositoryGetOutput {
     totalOfTodos: number;
 }
 
+interface TodoRepositoryDeleteParams {
+    id: string;
+}
+
 type Todo = z.infer<typeof todoSchema>;
 
 const todoSchema = z.object({
@@ -56,7 +60,15 @@ async function create({ content }: TodoRepositoryCreateParams) {
     });
 }
 
+async function deleteTodo({ id }: TodoRepositoryDeleteParams) {
+    fetch("/api/todos", {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+    });
+}
+
 export default {
     get,
     create,
+    deleteTodo,
 };

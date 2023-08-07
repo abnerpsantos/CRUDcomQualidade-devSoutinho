@@ -1,4 +1,5 @@
-import { createTodo, readTodo } from "core/db";
+import { createTodo, deleteTodo, readTodo } from "core/db";
+import { UUID } from "core/types/todo-types";
 
 interface getTodoListParams {
     page: number;
@@ -7,6 +8,10 @@ interface getTodoListParams {
 
 interface createTodoParams {
     content: string;
+}
+
+interface deleteTodoParams {
+    id: UUID;
 }
 
 async function get({ page, limit }: getTodoListParams) {
@@ -32,7 +37,13 @@ async function create({ content }: createTodoParams) {
     return todo;
 }
 
+async function deleteTodoById({ id }: deleteTodoParams) {
+    deleteTodo(id);
+    return "success";
+}
+
 export default {
     get,
     create,
+    deleteTodoById,
 };

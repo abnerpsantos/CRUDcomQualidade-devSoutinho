@@ -12,6 +12,7 @@ export default function handler(
     const HttpResponses: HttpResponsesType = {
         GET: () => todoController.getTodos(request, response),
         POST: () => todoController.createTodo(request, response),
+        DELETE: () => todoController.deleteTodo(request, response),
     };
     if (request.method) {
         return HttpResponses[request.method]();
