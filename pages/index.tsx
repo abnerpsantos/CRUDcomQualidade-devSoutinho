@@ -64,7 +64,12 @@ export default function Page() {
                 <form
                     onSubmit={async (e) => {
                         e.preventDefault();
-                        await todoController.create({ content: newTodoInput });
+                        const response = await todoController.create({
+                            content: newTodoInput,
+                        });
+                        if (response === "Error") {
+                            alert("Todo content must not be an empty string");
+                        }
                         setNewTodoInput("");
                         setCountSubmitCall((value) => value + 1);
                         setPage(() => {

@@ -32,6 +32,9 @@ function filterTodo(searchParam: string, todoList: Todo[]) {
 }
 
 function create({ content }: TodoControllerCreateParams) {
+    if (content === "") {
+        return "Error";
+    }
     return todoRepository.create({ content });
 }
 
