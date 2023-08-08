@@ -36,6 +36,11 @@ export default function Page() {
         setCountSubmitCall((value) => value + 1);
     };
 
+    const updateTodo = async function (id: string) {
+        await todoController.updateTodo({ id });
+        setCountSubmitCall((value) => value + 1);
+    };
+
     useEffect(() => {
         (async function () {
             setLoading(true);
@@ -126,10 +131,25 @@ export default function Page() {
                                 return (
                                     <tr key={todo.id}>
                                         <td>
-                                            <input type="checkbox" />
+                                            <input
+                                                type="checkbox"
+                                                checked={todo.done}
+                                                onChange={() =>
+                                                    updateTodo(todo.id)
+                                                }
+                                            />
                                         </td>
                                         <td>{todo.id.substring(0, 4)}</td>
-                                        <td>{todo.content}</td>
+                                        <td
+                                            defaultChecked={todo.done}
+                                            style={{
+                                                textDecoration: todo.done
+                                                    ? "line-through"
+                                                    : "none",
+                                            }}
+                                        >
+                                            {todo.content}
+                                        </td>
                                         <td align="right">
                                             <button
                                                 data-type="delete"

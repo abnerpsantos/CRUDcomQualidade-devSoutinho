@@ -1,4 +1,4 @@
-import { createTodo, deleteTodo, readTodo } from "core/db";
+import { createTodo, deleteTodo, readTodo, updateTodo } from "core/db";
 import { UUID } from "core/types/todo-types";
 
 interface getTodoListParams {
@@ -11,6 +11,10 @@ interface createTodoParams {
 }
 
 interface deleteTodoParams {
+    id: UUID;
+}
+
+interface updateTodoParams {
     id: UUID;
 }
 
@@ -42,8 +46,14 @@ async function deleteTodoById({ id }: deleteTodoParams) {
     return "success";
 }
 
+async function updateTodoById({ id }: updateTodoParams) {
+    updateTodo(id);
+    return "success";
+}
+
 export default {
     get,
     create,
     deleteTodoById,
+    updateTodoById,
 };

@@ -17,6 +17,10 @@ interface TodoRepositoryDeleteParams {
     id: string;
 }
 
+interface TodoRepositoryUpdateParams {
+    id: string;
+}
+
 type Todo = z.infer<typeof todoSchema>;
 
 const todoSchema = z.object({
@@ -64,8 +68,13 @@ async function deleteTodo({ id }: TodoRepositoryDeleteParams) {
     await fetch(`/api/todos/${id}/deleteTodo`);
 }
 
+async function updateTodo({ id }: TodoRepositoryUpdateParams) {
+    await fetch(`/api/todos/${id}/updateTodo`);
+}
+
 export default {
     get,
     create,
     deleteTodo,
+    updateTodo,
 };

@@ -20,6 +20,10 @@ interface TodoControllerDeleteParams {
     id: string;
 }
 
+interface TodoControllerUpdateParams {
+    id: string;
+}
+
 async function get({ page, limit }: TodoControllerGetParams = {}) {
     return todoRepository.get({ page: page || 1, limit: limit });
 }
@@ -47,9 +51,14 @@ function deleteTodo({ id }: TodoControllerDeleteParams) {
     }
     return todoRepository.deleteTodo({ id });
 }
+
+function updateTodo({ id }: TodoControllerUpdateParams) {
+    return todoRepository.updateTodo({ id });
+}
 export default {
     get,
     filterTodo,
     create,
     deleteTodo,
+    updateTodo,
 };

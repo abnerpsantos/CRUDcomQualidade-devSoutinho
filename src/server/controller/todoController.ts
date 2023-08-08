@@ -14,6 +14,10 @@ const createTodoBodySchema = z.object({
 const deleteTodoQuerySchema = z.object({
     id: z.string().uuid(),
 });
+
+const updateTodoQuerySchema = z.object({
+    id: z.string().uuid(),
+});
 async function getTodos(req: NextApiRequest, res: NextApiResponse) {
     const query = getTodoQuerySchema.safeParse(req.query);
     if (!query.success) {
@@ -57,8 +61,21 @@ async function deleteTodo(req: NextApiRequest, res: NextApiResponse) {
     });
 }
 
+async function updateTodo(req: NextApiRequest, res: NextApiResponse) {
+    const query = updateTodoQuerySchema.safeParse(req.query);
+    if (!query.success) {
+        throw new Error(query.error.message);
+    }
+    const { id } = query.data;
+    const success = todoRepository.updateTodoById({ id });
+    return res.status(200).json({
+        message: success,
+    });
+}
+
 export default {
     getTodos,
     createTodo,
     deleteTodo,
+    updateTodo,
 };
