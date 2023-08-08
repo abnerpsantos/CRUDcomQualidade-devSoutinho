@@ -56,7 +56,7 @@ async function deleteTodo(req: NextApiRequest, res: NextApiResponse) {
     }
     const { id } = query.data;
     const success = await todoRepository.deleteTodoById({ id });
-    return res.status(201).json({
+    return res.status(200).json({
         message: success,
     });
 }
