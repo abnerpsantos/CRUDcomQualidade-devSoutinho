@@ -11,7 +11,7 @@ const createTodoBodySchema = z.object({
     content: z.string(),
 });
 
-const deleteTodoBodySchema = z.object({
+const deleteTodoQuerySchema = z.object({
     id: z.string().uuid(),
 });
 async function getTodos(req: NextApiRequest, res: NextApiResponse) {
@@ -46,11 +46,11 @@ async function createTodo(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function deleteTodo(req: NextApiRequest, res: NextApiResponse) {
-    const body = deleteTodoBodySchema.safeParse(JSON.parse(req.body));
-    if (!body.success) {
-        throw new Error(body.error.message);
+    const query = deleteTodoQuerySchema.safeParse(req.query);
+    if (!query.success) {
+        throw new Error(query.error.message);
     }
-    const { id } = body.data;
+    const { id } = query.data;
     const success = await todoRepository.deleteTodoById({ id });
     return res.status(201).json({
         message: success,

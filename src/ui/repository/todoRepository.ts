@@ -61,10 +61,7 @@ async function create({ content }: TodoRepositoryCreateParams) {
 }
 
 async function deleteTodo({ id }: TodoRepositoryDeleteParams) {
-    fetch("/api/todos", {
-        method: "DELETE",
-        body: JSON.stringify({ id }),
-    });
+    fetch(`/api/todos/${id}/deleteTodo`);
 }
 
 export default {
