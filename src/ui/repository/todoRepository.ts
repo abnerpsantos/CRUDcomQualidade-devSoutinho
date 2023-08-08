@@ -54,14 +54,14 @@ async function get({
 }
 
 async function create({ content }: TodoRepositoryCreateParams) {
-    fetch("/api/todos", {
+    await fetch("/api/todos", {
         method: "POST",
         body: JSON.stringify({ content }),
     });
 }
 
 async function deleteTodo({ id }: TodoRepositoryDeleteParams) {
-    fetch(`/api/todos/${id}/deleteTodo`);
+    await fetch(`/api/todos/${id}/deleteTodo`);
 }
 
 export default {
